@@ -13,18 +13,22 @@ public class TabelaRoteamento {
     
     public TabelaRoteamento(){
         tabela = new ArrayList<Item>();
+        tabela.add(new Item("127.0.0.1",1,"127.0.0.1"));
     }
     
     
     public void update_tabela(String tabela_s,  InetAddress IPAddress){
         /* Atualize a tabela de rotamento a partir da string recebida. */
-        String[] itensTabela_s = tabela_s.split("*");
+        tabela_s = tabela_s.substring(1);
+        String[] itensTabela_s = tabela_s.split("\\*");
         String ip;
         String metrica;
         boolean jaExiste = false;
         for(String itemTabela_s : itensTabela_s){
-            ip = itemTabela_s.split(";")[0];
-            metrica = itemTabela_s.split(";")[1];
+            String[] bits = itemTabela_s.split(";");
+            ip = bits[0];
+            System.out.println(ip);
+            metrica = bits[1];
             for(Item itemTabela : tabela){
                 if(itemTabela.getIpDestino().equals(ip)){
                     jaExiste = true;
@@ -41,7 +45,7 @@ public class TabelaRoteamento {
     
     public String get_tabela_string(){
         String tabela_string = "!"; /* Tabela de roteamento vazia conforme especificado no protocolo */
-        StringBuilder auxString = null;
+        StringBuilder auxString = new StringBuilder();
         if(!tabela.isEmpty()){
             for(Item item :tabela){
                 auxString.append("*" + item.getIpDestino()+ ";" + item.getMetrica());
