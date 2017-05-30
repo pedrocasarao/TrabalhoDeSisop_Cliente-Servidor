@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ public class Roteador {
     public static void main(String[] args) throws IOException {
         /* Lista de endereço IPs dos vizinhos */
         ArrayList<String> ip_list = new ArrayList<>();
+        Semaphore mutex = new Semaphore(1);
 
         /* Le arquivo de entrada com lista de IPs dos roteadores vizinhos. */
         try ( BufferedReader inputFile = new BufferedReader(new FileReader("IPVizinhos.txt"))) {
@@ -28,9 +30,9 @@ public class Roteador {
         }
         
         /* Cria instâncias da tabela de roteamento e das threads de envio e recebimento de mensagens. */
-        TabelaRoteamento tabela = new TabelaRoteamento();
-        Thread sender = new Thread(new MessageReceiver(tabela));
-        Thread receiver = new Thread(new MessageSender(tabela, ip_list));
+        TabelaRoteamento tabela = new TabelaRoteamento(mutex);
+        Thread receiver = new Thread(new MessageReceiver(tabela));
+        Thread sender = new Thread(new MessageSender(tabela, ip_list,mutex));
         
         sender.start();
         receiver.start();

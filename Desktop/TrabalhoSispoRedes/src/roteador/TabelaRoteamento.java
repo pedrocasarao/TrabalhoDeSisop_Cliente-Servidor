@@ -3,6 +3,7 @@ package roteador;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public class TabelaRoteamento {
     /*Implemente uma estrutura de dados para manter a tabela de roteamento. 
@@ -10,10 +11,12 @@ public class TabelaRoteamento {
     */
     
     List<Item> tabela;
+    Semaphore mutex;
     
-    public TabelaRoteamento(){
+    public TabelaRoteamento(Semaphore mutex){
         tabela = new ArrayList<Item>();
         tabela.add(new Item("127.0.0.1",1,"127.0.0.1"));
+        this.mutex = mutex;
     }
     
     
@@ -40,7 +43,7 @@ public class TabelaRoteamento {
         }
         
         System.out.println( IPAddress.getHostAddress() + ": " + tabela_s);
-    
+        mutex.release();
     }
     
     public String get_tabela_string(){
