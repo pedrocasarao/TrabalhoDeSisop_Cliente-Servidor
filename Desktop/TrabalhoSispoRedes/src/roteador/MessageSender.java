@@ -15,7 +15,7 @@ public class MessageSender implements Runnable{
     TabelaRoteamento tabela; /*Tabela de roteamento */
     ArrayList<String> vizinhos; /* Lista de IPs dos roteadores vizinhos */
     Semaphore mutex;
-    Long time;
+    Long time = new Long(1);
     
     public MessageSender(TabelaRoteamento t, ArrayList<String> v,Semaphore mutex){
         tabela = t;

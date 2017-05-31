@@ -33,9 +33,9 @@ public class Roteador {
         TabelaRoteamento tabela = new TabelaRoteamento(mutex);
         Thread receiver = new Thread(new MessageReceiver(tabela));
         Thread sender = new Thread(new MessageSender(tabela, ip_list,mutex));
-        
-        sender.start();
+                
         receiver.start();
+        sender.start();
         
     }
     

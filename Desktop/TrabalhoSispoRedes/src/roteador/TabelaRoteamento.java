@@ -10,7 +10,6 @@ public class TabelaRoteamento {
     /*Implemente uma estrutura de dados para manter a tabela de roteamento. 
      * A tabela deve possuir: IP Destino, Métrica e IP de Saída.
      */
-
     List<Item> tabela;
     Semaphore mutex;
 
@@ -21,7 +20,7 @@ public class TabelaRoteamento {
 
     public void update_tabela(String tabela_s, InetAddress IPAddress) {
         /* Atualize a tabela de rotamento a partir da string recebida. */
-        if (tabela_s.equals("!")) {
+        if (!tabela_s.equals("!")) {
             boolean jaExiste = false;
             for (Item itemTabela : tabela) {
                 if (itemTabela.equals(IPAddress.toString())) {
@@ -32,6 +31,7 @@ public class TabelaRoteamento {
                 tabela.add(new Item(IPAddress.toString(), 1, IPAddress.toString()));
             }
         } else {
+            System.out.println(tabela_s);
             tabela_s = tabela_s.substring(1);
             String[] itensTabela_s = tabela_s.split("\\*");
             String ip;
