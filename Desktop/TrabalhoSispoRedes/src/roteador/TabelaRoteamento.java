@@ -20,16 +20,15 @@ public class TabelaRoteamento {
 
     public void update_tabela(String tabela_s, InetAddress IPAddress) {
         /* Atualize a tabela de rotamento a partir da string recebida. */
-        if(!tabela_s.equals("!")) {
-            System.out.println("entrou");
+        if(tabela_s.indexOf("!")>=0) {
             boolean jaExiste = false;
             for (Item itemTabela : tabela) {
-                if (itemTabela.equals(IPAddress.toString())) {
+                if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste = true;
                 }
             }
             if (!jaExiste) {
-                tabela.add(new Item(IPAddress.toString(), 1, IPAddress.toString()));
+                tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1)));
             }
         } else {
             System.out.println(tabela_s);
@@ -49,11 +48,10 @@ public class TabelaRoteamento {
                     }
                 }
                 if (!jaExiste) {
-                    tabela.add(new Item(ip, (Integer.parseInt(metrica) + 1), IPAddress.toString()));
+                    tabela.add(new Item(ip, (Integer.parseInt(metrica) + 1), IPAddress.toString().substring(1)));
                 }
             }
         }
-        System.out.println(IPAddress.getHostAddress() + ": " + tabela_s);
         mutex.release();
     }
 

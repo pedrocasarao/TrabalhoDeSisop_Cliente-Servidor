@@ -11,24 +11,27 @@ import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MessageSender implements Runnable{
-    TabelaRoteamento tabela; /*Tabela de roteamento */
-    ArrayList<String> vizinhos; /* Lista de IPs dos roteadores vizinhos */
+public class MessageSender implements Runnable {
+
+    TabelaRoteamento tabela;
+    /*Tabela de roteamento */
+    ArrayList<String> vizinhos;
+    /* Lista de IPs dos roteadores vizinhos */
     Semaphore mutex;
     Long time = new Long(1);
-    
-    public MessageSender(TabelaRoteamento t, ArrayList<String> v,Semaphore mutex){
+
+    public MessageSender(TabelaRoteamento t, ArrayList<String> v, Semaphore mutex) {
         tabela = t;
         vizinhos = v;
         this.mutex = mutex;
     }
-    
+
     @Override
     public void run() {
         DatagramSocket clientSocket = null;
         byte[] sendData;
         InetAddress IPAddress = null;
-        
+
         /* Cria socket para envio de mensagem */
         try {
             clientSocket = new DatagramSocket();
@@ -36,44 +39,45 @@ public class MessageSender implements Runnable{
             Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        
-        while(mutex.tryAcquire() || System.currentTimeMillis() >= time){
-            
-            /* Pega a tabela de roteamento no formato string, conforme especificado pelo protocolo. */
-            String tabela_string = tabela.get_tabela_string();
-               
-            /* Converte string para array de bytes para envio pelo socket. */
-            sendData = tabela_string.getBytes();
-            
-            /* Anuncia a tabela de roteamento para cada um dos vizinhos */
-            for (String ip : vizinhos){
-                /* Converte string com o IP do vizinho para formato InetAddress */
-                try {
-                    IPAddress = InetAddress.getByName(ip);
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
-                    continue;
+
+        while (true) {
+            if (/*mutex.tryAcquire() || */System.currentTimeMillis() >= time) {
+                /* Pega a tabela de roteamento no formato string, conforme especificado pelo protocolo. */
+                String tabela_string = tabela.get_tabela_string();
+
+                /* Converte string para array de bytes para envio pelo socket. */
+                sendData = tabela_string.getBytes();
+
+                /* Anuncia a tabela de roteamento para cada um dos vizinhos */
+                for (String ip : vizinhos) {
+                    /* Converte string com o IP do vizinho para formato InetAddress */
+                    try {
+                        IPAddress = InetAddress.getByName(ip);
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
+                        continue;
+                    }
+
+                    /* Configura pacote para envio da menssagem para o roteador vizinho na porta 5000*/
+                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 5000);
+
+                    /* Realiza envio da mensagem. */
+                    try {
+                        clientSocket.send(sendPacket);
+                    } catch (IOException ex) {
+                        Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-                
-                /* Configura pacote para envio da menssagem para o roteador vizinho na porta 5000*/
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 5000);         
-                
-                /* Realiza envio da mensagem. */
-                try {
-                    clientSocket.send(sendPacket);
-                } catch (IOException ex) {
-                    Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            
-            /* Espera 10 segundos antes de realizar o próximo envio. CONTUDO, caso
+
+                /* Espera 10 segundos antes de realizar o próximo envio. CONTUDO, caso
              * a tabela de roteamento sofra uma alteração, ela deve ser reenvida aos
              * vizinho imediatamente.
-             */            
-            time = System.currentTimeMillis() + 10000;
+                 */
+                time = System.currentTimeMillis() + 10000;
+            }
 
         }
-        
+
     }
-    
+
 }
