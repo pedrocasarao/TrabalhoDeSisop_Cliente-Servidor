@@ -41,16 +41,16 @@ public class MessageSender implements Runnable {
         }
 
         while (true) {
-            if (/*mutex.tryAcquire() || */System.currentTimeMillis() >= time) {
-                /* Pega a tabela de roteamento no formato string, conforme especificado pelo protocolo. */
-                String tabela_string = tabela.get_tabela_string();
-
-                /* Converte string para array de bytes para envio pelo socket. */
-                sendData = tabela_string.getBytes();
+            if (/*mutex.tryAcquire() || */System.currentTimeMillis() >= time) {                
 
                 /* Anuncia a tabela de roteamento para cada um dos vizinhos */
                 for (String ip : vizinhos) {
                     /* Converte string com o IP do vizinho para formato InetAddress */
+                    /* Pega a tabela de roteamento no formato string, conforme especificado pelo protocolo. */
+                String tabela_string = tabela.get_tabela_string(ip);
+
+                /* Converte string para array de bytes para envio pelo socket. */
+                sendData = tabela_string.getBytes();
                     try {
                         IPAddress = InetAddress.getByName(ip);
                     } catch (UnknownHostException ex) {

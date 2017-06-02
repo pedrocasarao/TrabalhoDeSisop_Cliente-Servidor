@@ -1,9 +1,12 @@
 package roteador;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TabelaRoteamento {
 
@@ -20,7 +23,7 @@ public class TabelaRoteamento {
 
     public void update_tabela(String tabela_s, InetAddress IPAddress) {
         /* Atualize a tabela de rotamento a partir da string recebida. */
-        if(tabela_s.indexOf("!")>=0) {
+        if (tabela_s.indexOf("!") >= 0) {
             boolean jaExiste = false;
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
@@ -48,20 +51,31 @@ public class TabelaRoteamento {
                     }
                 }
                 if (!jaExiste) {
-                    tabela.add(new Item(ip, (Integer.parseInt(metrica) + 1), IPAddress.toString().substring(1)));
+                    tabela.add(new Item(ip, (Integer.parseInt(metrica.trim()) + 1), IPAddress.toString().substring(1)));
                 }
+            }
+            boolean jaExiste2 = false;
+            for (Item itemTabela : tabela) {
+                if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
+                    jaExiste2 = true;
+                }
+            }
+            if (!jaExiste2) {
+                tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1)));
             }
         }
         mutex.release();
     }
 
-    public String get_tabela_string() {
+    public String get_tabela_string(String ip) {
         String tabela_string = "!";
         /* Tabela de roteamento vazia conforme especificado no protocolo */
         StringBuilder auxString = new StringBuilder();
         if (!tabela.isEmpty()) {
             for (Item item : tabela) {
-                auxString.append("*" + item.getIpDestino() + ";" + item.getMetrica());
+                if (!ip.equals(item.getIpSaida())) {
+                    auxString.append("*" + item.getIpDestino() + ";" + item.getMetrica());
+                }
             }
             tabela_string = auxString.toString();
         }
