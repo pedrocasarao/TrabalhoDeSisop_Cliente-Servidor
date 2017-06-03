@@ -23,7 +23,8 @@ public class TabelaRoteamento {
 
     public void update_tabela(String tabela_s, InetAddress IPAddress) {
         /* Atualize a tabela de rotamento a partir da string recebida. */
-        if (tabela_s.indexOf("!") >= 0) {
+        System.out.println(tabela_s.trim());
+        if (tabela_s.trim().equals("!")) {
             boolean jaExiste = false;
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
