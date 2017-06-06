@@ -84,7 +84,7 @@ public class TabelaRoteamento {
                 if (!ip.equals(item.getIpSaida())) {
                     auxString.append("*" + item.getIpDestino() + ";" + item.getMetrica());
                 }else{
-                    System.out.println("ele ja tem isso seu besta");
+                    System.out.println("ele jja tem isso seu besta");
                 }
             }
             if(auxString.length()>0){
