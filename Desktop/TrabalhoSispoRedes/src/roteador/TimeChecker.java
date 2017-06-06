@@ -24,11 +24,23 @@ public class TimeChecker implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if(!tabela.getTabela().isEmpty()){            
-                if (tabela.getTabela().removeIf(i -> i.getLastUpdate() < (System.currentTimeMillis()-15000))) {
+            if(!tabela.getTabela().isEmpty()){
+                Item item = null;
+                for(Item itemTabela : tabela.getTabela()){
+                    if(itemTabela.getLastUpdate() <= (System.currentTimeMillis()-3000)){
+                        item = itemTabela;
+                    }
+                }
+                if(item == null){
+                    tabela.getTabela().remove(item);
                     mutexAlteracao.release();
                     System.out.println("APAGOOOO!!!!");
                 }
+                
+                /*i0f (tabela.getTabela().removeIf(i -> i.getLastUpdate() < (System.currentTimeMillis()))) {
+                    mutexAlteracao.release();
+                    System.out.println("APAGOOOO!!!!");
+                }*/
             }
         }
     }

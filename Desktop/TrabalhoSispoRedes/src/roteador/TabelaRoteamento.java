@@ -29,11 +29,13 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste = true;
+                    System.out.println(itemTabela.getLastUpdate());
+                    System.out.println("De um ip já conhecido");
                 }
             }
             if (!jaExiste) {
-                System.out.println("De um ip já conhecido");
                 tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1), System.currentTimeMillis()));
+                System.out.println("Add");
                 mutex.release();
             }
         } else {
@@ -93,5 +95,4 @@ public class TabelaRoteamento {
     public List<Item> getTabela(){
         return tabela;
     }
-
 }
