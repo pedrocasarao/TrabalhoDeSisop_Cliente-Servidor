@@ -23,8 +23,8 @@ public class TabelaRoteamento {
 
     public void update_tabela(String tabela_s, InetAddress IPAddress) {
         /* Atualize a tabela de rotamento a partir da string recebida. */
-        System.out.println(tabela_s.trim());
         if (tabela_s.trim().equals("!")) {
+            System.out.println("String vazia");
             boolean jaExiste = false;
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
@@ -32,10 +32,12 @@ public class TabelaRoteamento {
                 }
             }
             if (!jaExiste) {
-                tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1)));
+                System.out.println("De um ip já conhecido");
+                tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1), System.currentTimeMillis()));
+                mutex.release();
             }
         } else {
-            System.out.println(tabela_s);
+            System.out.println("String populada");
             tabela_s = tabela_s.substring(1);
             String[] itensTabela_s = tabela_s.split("\\*");
             String ip;
@@ -49,23 +51,26 @@ public class TabelaRoteamento {
                 for (Item itemTabela : tabela) {
                     if (itemTabela.getIpDestino().equals(ip)) {
                         jaExiste = true;
+                        itemTabela.setLastUpdate();
                     }
                 }
                 if (!jaExiste) {
-                    tabela.add(new Item(ip, (Integer.parseInt(metrica.trim()) + 1), IPAddress.toString().substring(1)));
+                    tabela.add(new Item(ip, (Integer.parseInt(metrica.trim()) + 1), IPAddress.toString().substring(1), System.currentTimeMillis()));
+                    mutex.release();
                 }
             }
             boolean jaExiste2 = false;
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste2 = true;
+                    //itemTabela.setLastUpdate();
                 }
             }
             if (!jaExiste2) {
-                tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1)));
+                tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1), System.currentTimeMillis()));
+                mutex.release();
             }
         }
-        mutex.release();
     }
 
     public String get_tabela_string(String ip) {
@@ -76,12 +81,17 @@ public class TabelaRoteamento {
             for (Item item : tabela) {
                 if (!ip.equals(item.getIpSaida())) {
                     auxString.append("*" + item.getIpDestino() + ";" + item.getMetrica());
+                }else{
+                    System.out.println("ele ja tem isso seu besta");
                 }
             }
             tabela_string = auxString.toString();
         }
         /* Converta a tabela de rotamento para string, conforme formato definido no protocolo . */
         return tabela_string;
+    }
+    public List<Item> getTabela(){
+        return tabela;
     }
 
 }

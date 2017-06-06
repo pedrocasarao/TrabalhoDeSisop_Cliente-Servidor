@@ -13,11 +13,13 @@ public class Item {
     private String ipDestino;
     private int metrica;
     private String ipSaida;
+    private long lastUpdate;
 
-    public Item(String ipDestino, int metrica, String ipSaida) {
+    public Item(String ipDestino, int metrica, String ipSaida, long lastUpdate) {
         this.ipDestino = ipDestino;
         this.metrica = metrica;
         this.ipSaida = ipSaida;
+        this.lastUpdate = lastUpdate;
     } 
 
     public String getIpDestino() {
@@ -32,5 +34,12 @@ public class Item {
         return ipSaida;
     }
     
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+    
+    public void setLastUpdate(){
+        lastUpdate = System.currentTimeMillis();
+    }
 }
 

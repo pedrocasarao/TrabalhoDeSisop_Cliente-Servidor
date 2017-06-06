@@ -14,7 +14,7 @@ public class Roteador {
     public static void main(String[] args) throws IOException {
         /* Lista de endereço IPs dos vizinhos */
         ArrayList<String> ip_list = new ArrayList<>();
-        Semaphore mutex = new Semaphore(1);
+        Semaphore mutex = new Semaphore(0);
 
         /* Le arquivo de entrada com lista de IPs dos roteadores vizinhos. */
         try ( BufferedReader inputFile = new BufferedReader(new FileReader("IPVizinhos.txt"))) {
@@ -33,10 +33,11 @@ public class Roteador {
         TabelaRoteamento tabela = new TabelaRoteamento(mutex);
         Thread receiver = new Thread(new MessageReceiver(tabela));
         Thread sender = new Thread(new MessageSender(tabela, ip_list,mutex));
+        Thread timeChecker = new Thread(new TimeChecker(tabela, mutex));
                 
         receiver.start();
         sender.start();
+        timeChecker.start();
         
-    }
-    
+    }    
 }

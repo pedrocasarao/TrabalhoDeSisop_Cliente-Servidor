@@ -41,7 +41,7 @@ public class MessageSender implements Runnable {
         }
 
         while (true) {
-            if (/*mutex.tryAcquire() || */System.currentTimeMillis() >= time) {
+            if (mutex.tryAcquire() || System.currentTimeMillis() >= time) {
 
                 /* Anuncia a tabela de roteamento para cada um dos vizinhos */
                 for (String ip : vizinhos) {
