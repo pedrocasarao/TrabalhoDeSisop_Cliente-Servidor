@@ -6,6 +6,8 @@
 package roteador;
 
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,6 +49,13 @@ public class TimeChecker implements Runnable {
                     System.out.println("APAGOOOO!!!!");
                 }*/
             }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TimeChecker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("*");
         }
+        
     }
 }

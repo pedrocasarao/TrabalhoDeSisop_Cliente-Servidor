@@ -29,6 +29,7 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste = true;
+                    itemTabela.setLastUpdate();
                     System.out.println(itemTabela.getLastUpdate());
                     System.out.println("De um ip já conhecido");
                 }
@@ -65,7 +66,7 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste2 = true;
-                    //itemTabela.setLastUpdate();
+                    itemTabela.setLastUpdate();
                 }
             }
             if (!jaExiste2) {
