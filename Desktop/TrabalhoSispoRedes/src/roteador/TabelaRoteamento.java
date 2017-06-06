@@ -87,7 +87,9 @@ public class TabelaRoteamento {
                     System.out.println("ele ja tem isso seu besta");
                 }
             }
-            tabela_string = auxString.toString();
+            if(auxString.length()>0){
+               tabela_string = auxString.toString(); 
+            }
         }
         /* Converta a tabela de rotamento para string, conforme formato definido no protocolo . */
         return tabela_string;
