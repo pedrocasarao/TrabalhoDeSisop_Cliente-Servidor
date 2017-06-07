@@ -61,14 +61,15 @@ public class MessageSender implements Runnable {
 
                     /* Configura pacote para envio da menssagem para o roteador vizinho na porta 5000*/
                     DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 5000);
-
+                    
                     /* Realiza envio da mensagem. */
                     try {
                         clientSocket.send(sendPacket);
+                        System.out.println("String:"+tabela_string+"to Ip:"+ip);
                     } catch (IOException ex) {
                         Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
+                }                
 
                 /* Espera 10 segundos antes de realizar o próximo envio. CONTUDO, caso
              * a tabela de roteamento sofra uma alteração, ela deve ser reenvida aos
