@@ -29,9 +29,17 @@ public class Item {
     public int getMetrica() {
         return metrica;
     }
+    
+    public void setMetrica(int m) {
+        metrica = m;
+    }
 
     public String getIpSaida() {
         return ipSaida;
+    }
+    
+    public void setIpSaida(String ip){
+        ipSaida = ip;
     }
     
     public long getLastUpdate() {

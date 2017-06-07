@@ -29,7 +29,7 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste = true;
-                    itemTabela.setLastUpdate();
+                    itemTabela.setLastUpdate();                    
                     System.out.println(itemTabela.getLastUpdate());
                     System.out.println("De um ip já conhecido");
                 }
@@ -41,24 +41,29 @@ public class TabelaRoteamento {
             }
         } else {
             System.out.println("String populada");
-            tabela_s = tabela_s.substring(1);
+            tabela_s = tabela_s.substring(1).trim();
             String[] itensTabela_s = tabela_s.split("\\*");
             String ip;
-            String metrica;
+            int metrica;
             boolean jaExiste = false;
             for (String itemTabela_s : itensTabela_s) {
                 String[] bits = itemTabela_s.split(";");
                 ip = bits[0];
                 System.out.println(ip);
-                metrica = bits[1];
+                metrica = Integer.parseInt(bits[1]);
                 for (Item itemTabela : tabela) {
                     if (itemTabela.getIpDestino().equals(ip)) {
                         jaExiste = true;
+                        if(itemTabela.getMetrica() >= metrica){
+                            itemTabela.setMetrica(metrica);
+                            itemTabela.setIpSaida(IPAddress.toString().substring(1));
+                        }
                         itemTabela.setLastUpdate();
+                        
                     }
                 }
                 if (!jaExiste) {
-                    tabela.add(new Item(ip, (Integer.parseInt(metrica.trim()) + 1), IPAddress.toString().substring(1), System.currentTimeMillis()));
+                    tabela.add(new Item(ip, (metrica + 1), IPAddress.toString().substring(1), System.currentTimeMillis()));
                     mutex.release();
                 }
             }

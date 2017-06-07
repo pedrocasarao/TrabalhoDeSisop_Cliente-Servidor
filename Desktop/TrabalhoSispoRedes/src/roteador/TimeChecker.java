@@ -38,7 +38,6 @@ public class TimeChecker implements Runnable {
                 }
                 if (index != -1) {
                     if (tabela.getTabela().remove(index) != null) {
-
                         mutexAlteracao.release();
                         System.out.println("APAGOOOO!!!!");
                     }
