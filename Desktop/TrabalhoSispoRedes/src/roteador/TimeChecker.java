@@ -31,7 +31,6 @@ public class TimeChecker implements Runnable {
                 //Item item = null;
                 int index = -1;
                 for (Item itemTabela : tabela.getTabela()) {
-                    System.out.println(System.currentTimeMillis());
                     if ((System.currentTimeMillis() - itemTabela.getLastUpdate()) > 30000) {
                         index = tabela.getTabela().indexOf(itemTabela);
                     }

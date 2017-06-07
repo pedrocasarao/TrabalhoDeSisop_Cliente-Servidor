@@ -81,11 +81,19 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste2 = true;
+                    if(itemTabela.getMetrica() >= 2){
+                            itemTabela.setMetrica(1);
+                            itemTabela.setIpSaida(IPAddress.toString().substring(1));
+                        }
                     itemTabela.setLastUpdate();
                 }
             }
             if (!jaExiste2) {
                 tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1), System.currentTimeMillis()));
+                System.out.println("ADDED"+System.lineSeparator()+
+                                   "IP:"+IPAddress.toString().substring(1)+System.lineSeparator()+
+                                   "Metrica:"+1+System.lineSeparator()+
+                                   "IpSaida:"+IPAddress.toString().substring(1) );
                 mutex.release();
             }
         }
