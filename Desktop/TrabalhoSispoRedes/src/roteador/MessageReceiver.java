@@ -5,14 +5,19 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MessageReceiver implements Runnable{
     private TabelaRoteamento tabela;
+    Semaphore mutexSyncReceiver = new Semaphore(1);
+    Semaphore mutexSyncSender = new Semaphore(1);
     
-    public MessageReceiver(TabelaRoteamento t){
+    public MessageReceiver(TabelaRoteamento t,Semaphore mutexSyncReceiver,Semaphore mutexSyncSender){
         tabela = t;
+        this.mutexSyncReceiver = mutexSyncReceiver;
+        this.mutexSyncSender = mutexSyncSender;
     }
     
     @Override
@@ -31,7 +36,11 @@ public class MessageReceiver implements Runnable{
         byte[] receiveData = new byte[1024];
         
         while(true){
-            
+            try {
+                mutexSyncReceiver.acquire();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MessageReceiver.class.getName()).log(Level.SEVERE, null, ex);
+            }
             /* Cria um DatagramPacket */
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             
@@ -49,6 +58,7 @@ public class MessageReceiver implements Runnable{
             InetAddress IPAddress = receivePacket.getAddress();
             
             tabela.update_tabela(tabela_string, IPAddress);
+            mutexSyncSender.release();
         }
     }
     
