@@ -32,6 +32,7 @@ public class TabelaRoteamento {
                     if(itemTabela.getMetrica() >= 2){
                             itemTabela.setMetrica(1);
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
+                            mutex.release();
                         }
                         itemTabela.setLastUpdate();
                         System.out.println("UPDATED"+System.lineSeparator()+
@@ -39,6 +40,7 @@ public class TabelaRoteamento {
                 }
             }
             if (!jaExiste) {
+                //Adiciona o ip da maquina que não enviou tabela com metrica 1
                 tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1), System.currentTimeMillis()));
                 System.out.println("ADDED"+System.lineSeparator()+
                                    "IP:"+IPAddress.toString().substring(1)+System.lineSeparator()+
@@ -62,6 +64,7 @@ public class TabelaRoteamento {
                         if(itemTabela.getMetrica() >= metrica+1){
                             itemTabela.setMetrica(metrica);
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
+                            mutex.release();
                         }
                         itemTabela.setLastUpdate();
                         System.out.println("UPDATED"+System.lineSeparator()+
@@ -69,6 +72,7 @@ public class TabelaRoteamento {
                     }
                 }
                 if (!jaExiste) {
+                    //Adiciona um ip enviado que ainda não está na tabela com metrica enviada +1 e saida do ip que enviou
                     tabela.add(new Item(ip, (metrica + 1), IPAddress.toString().substring(1), System.currentTimeMillis()));
                     System.out.println("ADDED"+System.lineSeparator()+
                                        "IP:"+ip+System.lineSeparator()+
@@ -84,11 +88,13 @@ public class TabelaRoteamento {
                     if(itemTabela.getMetrica() >= 2){
                             itemTabela.setMetrica(1);
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
+                            mutex.release();
                         }
                     itemTabela.setLastUpdate();
                 }
             }
             if (!jaExiste2) {
+                //Adiciona um ip que enviou tabela diretamennte porem ele próprio não estava cadastrado.
                 tabela.add(new Item(IPAddress.toString().substring(1), 1, IPAddress.toString().substring(1), System.currentTimeMillis()));
                 System.out.println("ADDED"+System.lineSeparator()+
                                    "IP:"+IPAddress.toString().substring(1)+System.lineSeparator()+
