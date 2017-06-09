@@ -62,7 +62,7 @@ public class TabelaRoteamento {
                     if (itemTabela.getIpDestino().equals(ip)) {
                         jaExiste = true;
                         if(itemTabela.getMetrica() >= metrica+1){
-                            itemTabela.setMetrica(metrica);
+                            itemTabela.setMetrica(metrica+1);
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
                             mutex.release();
                         }
