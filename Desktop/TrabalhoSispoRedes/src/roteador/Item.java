@@ -48,6 +48,7 @@ public class Item {
     
     public void setLastUpdate(){
         lastUpdate = System.currentTimeMillis();
+        System.out.println("IP:"+ipDestino+" Time Updated");
     }
 }
 
