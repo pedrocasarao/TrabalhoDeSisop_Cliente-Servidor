@@ -76,7 +76,7 @@ public class TabelaRoteamento {
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
                             mutex.release();
                         }
-                        if (itemTabela.getIpSaida().equals(ip)) {
+                        if (itemTabela.getIpSaida().equals(IPAddress.toString().substring(1))) {
                             itemTabela.setLastUpdate();
                         }
                         //System.out.println("UPDATED" + System.lineSeparator()

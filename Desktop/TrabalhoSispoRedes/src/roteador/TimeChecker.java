@@ -31,7 +31,7 @@ public class TimeChecker implements Runnable {
                 //Item item = null;
                 int index = -1;
                 for (Item itemTabela : tabela.getTabela()) {
-                    if ((System.currentTimeMillis() - itemTabela.getLastUpdate()) > 30000) {
+                    if ((System.currentTimeMillis() - itemTabela.getLastUpdate()) > 10000) {
                         index = tabela.getTabela().indexOf(itemTabela);
                     }
                 }
@@ -48,7 +48,7 @@ public class TimeChecker implements Runnable {
                 }*/
             }
             try {
-                Thread.sleep(5000);
+                Thread.sleep(2500);
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeChecker.class.getName()).log(Level.SEVERE, null, ex);
             }
