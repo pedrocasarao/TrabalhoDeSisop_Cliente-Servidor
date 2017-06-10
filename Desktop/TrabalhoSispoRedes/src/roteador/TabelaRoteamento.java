@@ -38,8 +38,8 @@ public class TabelaRoteamento {
                     if (itemTabela.getIpSaida().equals(IPAddress.toString().substring(1))) {
                         itemTabela.setLastUpdate();
                     }
-                    System.out.println("UPDATED" + System.lineSeparator()
-                            + "IP:" + itemTabela.getIpDestino());
+                    //System.out.println("UPDATED" + System.lineSeparator()
+                    //        + "IP:" + itemTabela.getIpDestino());
                 }
             }
             if (!jaExiste) {
@@ -72,8 +72,8 @@ public class TabelaRoteamento {
                         if (itemTabela.getIpSaida().equals(ip)) {
                             itemTabela.setLastUpdate();
                         }
-                        System.out.println("UPDATED" + System.lineSeparator()
-                                + "IP:" + itemTabela.getIpDestino());
+                        //System.out.println("UPDATED" + System.lineSeparator()
+                        //        + "IP:" + itemTabela.getIpDestino());
                     }
                 }
                 if (!jaExiste) {
