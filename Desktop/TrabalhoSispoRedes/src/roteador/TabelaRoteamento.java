@@ -15,14 +15,21 @@ public class TabelaRoteamento {
      */
     List<Item> tabela;
     Semaphore mutex;
-
-    public TabelaRoteamento(Semaphore mutex) {
+    Semaphore mutexSync;
+    
+    public TabelaRoteamento(Semaphore mutex,Semaphore mutexSync) {
         tabela = new ArrayList<Item>();
         this.mutex = mutex;
+        this.mutexSync = mutexSync;
     }
 
     public void update_tabela(String tabela_s, InetAddress IPAddress) {
-        /* Atualize a tabela de rotamento a partir da string recebida. */
+        try {
+            /* Atualize a tabela de rotamento a partir da string recebida. */
+            mutexSync.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TabelaRoteamento.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println(tabela_s.trim());
         if (tabela_s.trim().equals("!")) {
             boolean jaExiste = false;
@@ -114,9 +121,16 @@ public class TabelaRoteamento {
         for (Item itemTabela : tabela) {
             System.out.println(itemTabela.getIpDestino() + "/" + itemTabela.getMetrica() + "/" + itemTabela.getIpSaida());
         }
+        mutexSync.release();
     }
 
     public String get_tabela_string(String ip) {
+        try {
+            mutexSync.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TabelaRoteamento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         String tabela_string = "!";
         /* Tabela de roteamento vazia conforme especificado no protocolo */
         StringBuilder auxString = new StringBuilder();
@@ -134,11 +148,18 @@ public class TabelaRoteamento {
                 tabela_string = auxString.toString();
             }
         }
+        mutexSync.release();
         /* Converta a tabela de rotamento para string, conforme formato definido no protocolo . */
-        return tabela_string;
+        return tabela_string;        
     }
 
     public List<Item> getTabela() {
+        try {
+            mutexSync.acquire();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TabelaRoteamento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        mutexSync.release();
         return tabela;
     }
 }

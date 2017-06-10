@@ -19,15 +19,11 @@ public class MessageSender implements Runnable {
     /* Lista de IPs dos roteadores vizinhos */
     Semaphore mutex;
     Long time = new Long(1);
-    Semaphore mutexSyncReceiver = new Semaphore(1);
-    Semaphore mutexSyncSender = new Semaphore(1);
 
-    public MessageSender(TabelaRoteamento t, ArrayList<String> v, Semaphore mutex, Semaphore mutexSyncReceiver, Semaphore mutexSyncSender) {
+    public MessageSender(TabelaRoteamento t, ArrayList<String> v, Semaphore mutex) {
         tabela = t;
         vizinhos = v;
         this.mutex = mutex;
-        this.mutexSyncReceiver = mutexSyncReceiver;
-        this.mutexSyncSender = mutexSyncSender;
     }
 
     @Override
@@ -46,11 +42,7 @@ public class MessageSender implements Runnable {
 
         while (true) {
             if (mutex.tryAcquire() || System.currentTimeMillis() >= time) {
-                try {
-                    mutexSyncSender.acquire();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
                 /* Anuncia a tabela de roteamento para cada um dos vizinhos */
                 for (String ip : vizinhos) {
                     /* Converte string com o IP do vizinho para formato InetAddress */
@@ -79,7 +71,6 @@ public class MessageSender implements Runnable {
                         Logger.getLogger(MessageSender.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                mutexSyncReceiver.release();
 
                 /* Espera 10 segundos antes de realizar o próximo envio. CONTUDO, caso
              * a tabela de roteamento sofra uma alteração, ela deve ser reenvida aos
