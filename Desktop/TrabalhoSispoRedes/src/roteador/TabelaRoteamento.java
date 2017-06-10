@@ -154,12 +154,6 @@ public class TabelaRoteamento {
     }
 
     public List<Item> getTabela() {
-        try {
-            mutexSync.acquire();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(TabelaRoteamento.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        mutexSync.release();
         return tabela;
     }
 }
