@@ -103,6 +103,10 @@ public class TabelaRoteamento {
                 mutex.release();
             }
         }
+        
+        for(Item itemTabela: tabela){
+            System.out.println(itemTabela.getIpDestino()+"/"+itemTabela.getMetrica()+"/"+itemTabela.getIpSaida());                    
+        }
     }
 
     public String get_tabela_string(String ip) {
@@ -113,7 +117,7 @@ public class TabelaRoteamento {
             for (Item item : tabela) {
                 if (!ip.equals(item.getIpSaida())) {
                     String aux = "*" + item.getIpDestino() + ";" + item.getMetrica();                    
-                    if(!ip.equals(item.getIpDestino())){
+                    if(ip.equals(item.getIpDestino())){
                         aux = "";
                     }
                     auxString.append(aux);
