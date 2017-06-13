@@ -136,24 +136,25 @@ public class TabelaRoteamento {
         
         String tabela_string = "!";
         /* Tabela de roteamento vazia conforme especificado no protocolo */
-        StringBuilder auxString = new StringBuilder();
+        
         if (tabela.isEmpty()) {            
             mutexSync.release();
             return "!";
         }else{
+            StringBuilder auxString = new StringBuilder();
             for (Item item : tabela) {
-                auxString = new StringBuilder();
-                if (!ip.equals(item.getIpSaida())) {
-                    String aux = "*" + item.getIpDestino() + ";" + item.getMetrica();
-                    if (!ip.equals(item.getIpDestino())) {
-                        auxString.append(aux);
+                String aux = "";                                                    
+                if (!ip.equals(item.getIpSaida())) {                                
+                    aux = "*" + item.getIpDestino() + ";" + item.getMetrica();      
+                    if (!ip.equals(item.getIpDestino())) {                              
+                        auxString.append(aux);                                      
                     }
                 }
             }
             if (auxString.length() > 0) {
                 tabela_string = auxString.toString();
-                System.out.println(tabela_string);
-            }
+                System.out.println(tabela_string+" está sendo enviado");
+            }            
             mutexSync.release();
             /* Converta a tabela de rotamento para string, conforme formato definido no protocolo . */
             return tabela_string;
@@ -161,7 +162,6 @@ public class TabelaRoteamento {
     }
 
     public List<Item> getTabela() {
-        
         return tabela;
     }
 }
