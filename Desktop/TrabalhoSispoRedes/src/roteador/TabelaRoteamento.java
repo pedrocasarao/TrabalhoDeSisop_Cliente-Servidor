@@ -32,7 +32,7 @@ public class TabelaRoteamento {
         }
         boolean alterouTabela = false;
         System.out.println(tabela_s.trim());
-        if (tabela_s.trim().equals("!")) {
+        if (tabela_s.charAt(0) == '!') {
             boolean jaExiste = false;
             System.out.println("Entrei !");
             for (Item itemTabela : tabela) {
