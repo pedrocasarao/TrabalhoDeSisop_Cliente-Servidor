@@ -142,8 +142,9 @@ public class TabelaRoteamento {
             return "!";
         }else{
             for (Item item : tabela) {
+                String aux = "";
                 if (!ip.equals(item.getIpSaida())) {
-                    String aux = "*" + item.getIpDestino() + ";" + item.getMetrica();
+                    aux = "*" + item.getIpDestino() + ";" + item.getMetrica();
                     if (!ip.equals(item.getIpDestino())) {
                         auxString.append(aux);
                     }
@@ -160,6 +161,7 @@ public class TabelaRoteamento {
     }
 
     public List<Item> getTabela() {
+        
         return tabela;
     }
 }
