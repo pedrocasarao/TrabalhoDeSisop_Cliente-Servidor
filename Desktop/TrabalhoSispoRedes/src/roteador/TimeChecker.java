@@ -53,7 +53,7 @@ public class TimeChecker implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeChecker.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("*");
+            System.out.println("garbage cleaner passed");
         }
         
     }
