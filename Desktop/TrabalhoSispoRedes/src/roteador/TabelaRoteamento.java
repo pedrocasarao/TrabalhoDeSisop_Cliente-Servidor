@@ -142,7 +142,7 @@ public class TabelaRoteamento {
             return "!";
         }else{
             for (Item item : tabela) {
-                auxString = null;
+                auxString = new StringBuilder();
                 if (!ip.equals(item.getIpSaida())) {
                     String aux = "*" + item.getIpDestino() + ";" + item.getMetrica();
                     if (!ip.equals(item.getIpDestino())) {
