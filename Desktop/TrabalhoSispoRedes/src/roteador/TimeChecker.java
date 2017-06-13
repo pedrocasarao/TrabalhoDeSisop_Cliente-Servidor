@@ -34,6 +34,7 @@ public class TimeChecker implements Runnable {
                     if ((System.currentTimeMillis() - itemTabela.getLastUpdate()) > 10000) {
                         index = tabela.getTabela().indexOf(itemTabela);
                     }
+                    System.out.println(itemTabela.getIpDestino() + "/" + itemTabela.getMetrica() + "/" + itemTabela.getIpSaida() + "/" + itemTabela.getLastUpdate());
                 }
                 if (index != -1) {
                     if (tabela.getTabela().remove(index) != null) {

@@ -117,10 +117,6 @@ public class TabelaRoteamento {
                 mutex.release();
             }
         }
-
-        for (Item itemTabela : tabela) {
-            System.out.println(itemTabela.getIpDestino() + "/" + itemTabela.getMetrica() + "/" + itemTabela.getIpSaida());
-        }
         mutexSync.release();
     }
 
