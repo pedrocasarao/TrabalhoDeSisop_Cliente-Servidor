@@ -30,6 +30,7 @@ public class TabelaRoteamento {
         } catch (InterruptedException ex) {
             Logger.getLogger(TabelaRoteamento.class.getName()).log(Level.SEVERE, null, ex);
         }
+        boolean alterouTabela = false;
         System.out.println(tabela_s.trim());
         if (tabela_s.trim().equals("!")) {
             boolean jaExiste = false;
@@ -39,7 +40,7 @@ public class TabelaRoteamento {
                     if (itemTabela.getMetrica() > 1) {
                         itemTabela.setMetrica(1);
                         itemTabela.setIpSaida(IPAddress.toString().substring(1));
-                        mutex.release();
+                        alterouTabela =true;
                     }
                     
                     if (itemTabela.getIpSaida().equals(IPAddress.toString().substring(1))) {
@@ -56,7 +57,7 @@ public class TabelaRoteamento {
                         + "IP:" + IPAddress.toString().substring(1) + System.lineSeparator()
                         + "Metrica:" + 1 + System.lineSeparator()
                         + "IpSaida:" + IPAddress.toString().substring(1));
-                mutex.release();
+                alterouTabela = true;
             }
         } else {
             tabela_s = tabela_s.substring(1).trim();
@@ -74,7 +75,7 @@ public class TabelaRoteamento {
                         if (itemTabela.getMetrica() > metrica + 1) {
                             itemTabela.setMetrica(metrica + 1);
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
-                            mutex.release();
+                            alterouTabela = true;
                         }
                         if (itemTabela.getIpSaida().equals(IPAddress.toString().substring(1))) {
                             itemTabela.setLastUpdate();
@@ -90,7 +91,7 @@ public class TabelaRoteamento {
                             + "IP:" + ip + System.lineSeparator()
                             + "Metrica:" + metrica + System.lineSeparator()
                             + "IpSaida:" + IPAddress.toString().substring(1));
-                    mutex.release();
+                    alterouTabela = true;
                 }
             }
             boolean jaExiste2 = false;
@@ -100,7 +101,7 @@ public class TabelaRoteamento {
                     if (itemTabela.getMetrica() > 1) {
                         itemTabela.setMetrica(1);
                         itemTabela.setIpSaida(IPAddress.toString().substring(1));
-                        mutex.release();
+                        alterouTabela = true;
                     }
                     if (itemTabela.getIpSaida().equals(IPAddress.toString().substring(1))) {
                         itemTabela.setLastUpdate();
@@ -114,8 +115,11 @@ public class TabelaRoteamento {
                         + "IP:" + IPAddress.toString().substring(1) + System.lineSeparator()
                         + "Metrica:" + 1 + System.lineSeparator()
                         + "IpSaida:" + IPAddress.toString().substring(1));
-                mutex.release();
+                alterouTabela = true;
             }
+        }
+        if(alterouTabela){
+            mutex.release();
         }
         mutexSync.release();
     }
