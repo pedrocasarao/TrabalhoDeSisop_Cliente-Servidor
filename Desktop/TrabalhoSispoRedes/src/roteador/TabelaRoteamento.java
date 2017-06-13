@@ -34,6 +34,7 @@ public class TabelaRoteamento {
         System.out.println(tabela_s.trim());
         if (tabela_s.trim().equals("!")) {
             boolean jaExiste = false;
+            System.out.println("Entrei !");
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste = true;
@@ -45,6 +46,7 @@ public class TabelaRoteamento {
                     
                     if (itemTabela.getIpSaida().equals(IPAddress.toString().substring(1))) {
                         itemTabela.setLastUpdate();
+                        System.out.println("Dei Update no IP "+itemTabela.getIpSaida());
                     }
                     //System.out.println("UPDATED" + System.lineSeparator()
                     //        + "IP:" + itemTabela.getIpDestino());
@@ -60,6 +62,7 @@ public class TabelaRoteamento {
                 alterouTabela = true;
             }
         } else {
+            System.out.println("Entrei no else / " + tabela_s);
             tabela_s = tabela_s.substring(1).trim();
             String[] itensTabela_s = tabela_s.split("\\*");
             String ip;
@@ -134,7 +137,10 @@ public class TabelaRoteamento {
         String tabela_string = "!";
         /* Tabela de roteamento vazia conforme especificado no protocolo */
         StringBuilder auxString = new StringBuilder();
-        if (!tabela.isEmpty()) {
+        if (tabela.isEmpty()) {            
+            mutexSync.release();
+            return "!";
+        }else{
             for (Item item : tabela) {
                 if (!ip.equals(item.getIpSaida())) {
                     String aux = "*" + item.getIpDestino() + ";" + item.getMetrica();
@@ -145,11 +151,12 @@ public class TabelaRoteamento {
             }
             if (auxString.length() > 0) {
                 tabela_string = auxString.toString();
+                System.out.println(tabela_string);
             }
-        }
-        mutexSync.release();
-        /* Converta a tabela de rotamento para string, conforme formato definido no protocolo . */
-        return tabela_string;        
+            mutexSync.release();
+            /* Converta a tabela de rotamento para string, conforme formato definido no protocolo . */
+            return tabela_string;
+        }                
     }
 
     public List<Item> getTabela() {
