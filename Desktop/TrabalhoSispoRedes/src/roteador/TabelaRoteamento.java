@@ -36,7 +36,7 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste = true;
-                    if (itemTabela.getMetrica() >= 2) {
+                    if (itemTabela.getMetrica() > 1) {
                         itemTabela.setMetrica(1);
                         itemTabela.setIpSaida(IPAddress.toString().substring(1));
                         mutex.release();
@@ -71,7 +71,7 @@ public class TabelaRoteamento {
                 for (Item itemTabela : tabela) {
                     if (itemTabela.getIpDestino().equals(ip)) {
                         jaExiste = true;
-                        if (itemTabela.getMetrica() >= metrica + 1) {
+                        if (itemTabela.getMetrica() > metrica + 1) {
                             itemTabela.setMetrica(metrica + 1);
                             itemTabela.setIpSaida(IPAddress.toString().substring(1));
                             mutex.release();
@@ -97,7 +97,7 @@ public class TabelaRoteamento {
             for (Item itemTabela : tabela) {
                 if (itemTabela.getIpDestino().equals(IPAddress.toString().substring(1))) {
                     jaExiste2 = true;
-                    if (itemTabela.getMetrica() >= 2) {
+                    if (itemTabela.getMetrica() > 1) {
                         itemTabela.setMetrica(1);
                         itemTabela.setIpSaida(IPAddress.toString().substring(1));
                         mutex.release();
