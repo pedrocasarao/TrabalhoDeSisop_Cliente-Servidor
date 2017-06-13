@@ -26,7 +26,7 @@ public class TimeChecker implements Runnable {
     @Override
     public void run() {
         while (true) {
-            
+
             if (!tabela.getTabela().isEmpty()) {
                 //Item item = null;
                 int index = -1;
@@ -40,6 +40,9 @@ public class TimeChecker implements Runnable {
                     if (tabela.getTabela().remove(index) != null) {
                         mutexAlteracao.release();
                         System.out.println("APAGOOOO!!!!");
+                        for (Item itemTabela : tabela.getTabela()) {
+                            System.out.println(itemTabela.getIpDestino() + "/" + itemTabela.getMetrica() + "/" + itemTabela.getIpSaida() + "/" + itemTabela.getLastUpdate());
+                        }
                     }
                 }
 
@@ -49,12 +52,11 @@ public class TimeChecker implements Runnable {
                 }*/
             }
             try {
-                Thread.sleep(2500);
+                Thread.sleep(5000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeChecker.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("garbage cleaner passed");
         }
-        
     }
 }
